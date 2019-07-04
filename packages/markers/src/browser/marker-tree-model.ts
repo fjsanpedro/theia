@@ -34,4 +34,12 @@ export class MarkerTreeModel extends TreeModelImpl {
     protected getOpenerOptionsByMarker(node: MarkerNode): OpenerOptions | undefined {
         return undefined;
     }
+
+    openNode(node: TreeNode): void {
+        if (MarkerNode.is(node)) {
+            open(this.openerService, node.uri, { ...this.getOpenerOptionsByMarker(node), mode: 'reveal' });
+        } else {
+            super.openNode(node);
+        }
+    }
 }

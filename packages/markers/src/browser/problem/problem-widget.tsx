@@ -19,7 +19,7 @@ import { ProblemManager } from './problem-manager';
 import { ProblemMarker } from '../../common/problem-marker';
 import { ProblemTreeModel } from './problem-tree-model';
 import { MarkerInfoNode, MarkerNode, MarkerRootNode } from '../marker-tree';
-import { TreeWidget, TreeProps, ContextMenuRenderer, TreeNode, NodeProps, TreeModel } from '@theia/core/lib/browser';
+import { TreeWidget, TreeProps, ContextMenuRenderer, TreeNode, NodeProps, TreeModel, SelectableTreeNode } from '@theia/core/lib/browser';
 import { DiagnosticSeverity } from 'vscode-languageserver-types';
 import * as React from 'react';
 
@@ -44,6 +44,12 @@ export class ProblemWidget extends TreeWidget {
         this.addClass('theia-marker-container');
 
         this.addClipboardListener(this.node, 'copy', e => this.handleCopy(e));
+        this.toDispose.push(this.model.onSelectionChanged(selection => {
+            const node = selection[0];
+            if (node) {
+                this.handleReveal(node);
+            }
+        }));
     }
 
     storeState(): object {
@@ -142,6 +148,17 @@ export class ProblemWidget extends TreeWidget {
                 <span className='notification-count'>{node.numberOfMarkers.toString()}</span>
             </div>
         </div>;
+    }
+
+    /**
+     * Handle revealing the node.
+     * Revealing a marker node reveals the corresponding editor.
+     * @param node {SelectableTreeNode} the selectable tree node.
+     */
+    protected handleReveal(node: SelectableTreeNode): void {
+        if (MarkerNode.is(node)) {
+            this.model.openNode(node);
+        }
     }
 
 }
