@@ -1,6 +1,7 @@
 # Change Log
 
 ## v0.9.0
+- [task] added support for VS Code task contribution points: `taskDefinitions`, `problemMatchers`, and `problemPatterns`
 
 Breaking changes:
 
