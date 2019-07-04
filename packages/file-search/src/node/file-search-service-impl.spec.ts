@@ -46,6 +46,16 @@ describe('search-service', function () {
         service = testContainer.get(FileSearchServiceImpl);
     });
 
+    it('should find and prioritize exact file matches', async () => {
+        const pattern = 'file-search-service-impl';
+        const rootUri = FileUri.create(path.resolve(__dirname, '..')).toString();
+        const matches = await service.find(pattern, { rootUris: [rootUri] });
+        const expectedFile = FileUri.create(__filename).displayName;
+        const testFile = matches.find(e => e.endsWith(expectedFile));
+        expect(matches[0]).contains(pattern);
+        expect(testFile).to.be.not.undefined;
+    });
+
     it('shall fuzzy search this spec file', async () => {
         const rootUri = FileUri.create(path.resolve(__dirname, '..')).toString();
         const matches = await service.find('spc', { rootUris: [rootUri] });

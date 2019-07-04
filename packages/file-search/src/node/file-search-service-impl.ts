@@ -85,9 +85,6 @@ export class FileSearchServiceImpl implements FileSearchService {
                     } else if (opts.fuzzyMatch && fuzzy.test(searchPattern, candidate)) {
                         fuzzyMatches.add(fileUri);
                     }
-                    if (exactMatches.size + fuzzyMatches.size === opts.limit) {
-                        cancellationSource.cancel();
-                    }
                 }, token);
             } catch (e) {
                 console.error('Failed to search:', root, e);
@@ -96,7 +93,10 @@ export class FileSearchServiceImpl implements FileSearchService {
         if (clientToken && clientToken.isCancellationRequested) {
             return [];
         }
-        return [...exactMatches, ...fuzzyMatches];
+        // Sort the fuzzy matches based on their score.
+        const sortedFuzzyMatches = Array.from(fuzzyMatches).sort((a: string, b: string) => this.compareFuzzyMatches(a, b, searchPattern));
+        // Return the limited list of exact and sorted matches.
+        return [...exactMatches, ...sortedFuzzyMatches].slice(0, opts.limit);
     }
 
     private doFind(rootUri: URI, options: FileSearchService.BaseOptions,
@@ -150,4 +150,28 @@ export class FileSearchServiceImpl implements FileSearchService {
         return args;
     }
 
+    /**
+     * Compare two fuzzy matches based on their score.
+     *
+     * @param a {string} comparison string.
+     * @param b {string} comparison string.
+     * @param searchPattern the search pattern to look for.
+     */
+    private compareFuzzyMatches(a: string, b: string, searchPattern: string): number {
+        const scoreA: number = this.score(a, searchPattern);
+        const scoreB: number = this.score(b, searchPattern);
+        return scoreB - scoreA;
+    }
+
+    /**
+     * Score a given file uri against the `searchPattern`.
+     * @param uri {string} the file uri.
+     * @param searchPattern {string} the search pattern to look for.
+     *
+     * @returns the fuzzy match score.
+     */
+    private score(uri: string, searchPattern: string): number {
+        const match = fuzzy.match(searchPattern, uri);
+        return (match === null) ? 0 : match.score;
+    }
 }
