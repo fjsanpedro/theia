@@ -11,7 +11,7 @@ Breaking changes:
 
 ## v0.8.0
 
-- [core] added bépo keyboard layout
+- [core] added bépo keyboard layoutasd
 - [core] added sorting to the extension names in the about dialog
 - [core] added sorting to the prefixed quick-open commands
 - [core] added support for octicon icons in the statusbar
@@ -36,7 +36,7 @@ Breaking changes:
 - [keymaps] updated the UI of the keybindings-widget when resizing
 - [monaco] fixed overflow with editor hints
 - [navigator] added VSCode-like compare for files
-- [navigator] added ability to select for compare
+- [navigator] added ability to select for compareasdasd
 - [plugin] added VSCode API to register `DebugAdapterTrackerFactory`
 - [plugin] added `setTextDocumentLanguage` Plug-in API
 - [preview] added scrolling synchronization between editor and preview
