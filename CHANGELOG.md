@@ -15,11 +15,11 @@ Breaking changes:
 - [core] added sorting to the extension names in the about dialog
 - [core] added sorting to the prefixed quick-open commands
 - [core] added support for octicon icons in the statusbar
-- [core] allowed passing of command args to context menus
+- [core] allowed passing of command args to context menusasdasd
 - [core] added the ability to rebind the `BrowserMenuBarContribution`
-- [core] fixed issue with webview resizing
+- [core] fixed issue with webview resizingasdasd
 - [core] fixed label encoding for diff uris
-- [cored] added `TextareaAutosize` for textarea resizing
+- [cored] added `TextareaAutosize` for textarea resasdasdizing
 - [debug] added throttling to the debug console output
 - [debug] fixed breakpoint resizing error in the debug-widget
 - [editor] added the ability to rebind the `EditorWidgetFactory`
